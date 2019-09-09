@@ -1,14 +1,15 @@
 {
-  "name": "google-map",
+  "name": "Google_API",
   "version": "0.0.1",
   "description": "구글 API를 사용한 장소 검색 서비스",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app"
   },
-  "author": "ZeroCho",
+  "author": "Chobby",
   "license": "ISC",
   "dependencies": {
+    "@google/maps": "^0.5.5",
     "axios": "^0.18.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.4",
