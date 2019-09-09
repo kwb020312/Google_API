@@ -7,7 +7,7 @@ html
     form#search-form(method='get')
       span 
         a(href='/' class='noun') 장소 검색 서비스
-      input#search
+      input(autocomplete='off')#search
       select#type
         option(value='') 없음
         option(value='cafe') 카페
@@ -17,6 +17,9 @@ html
       button#search-btn.btn(type='submit') 검색
       button#loc-search-btn.btn(type='button') 주변검색
       ul#search-list
+      if history
+        for h in history
+          button.history-btn=h.query
     block content
     script.
       var timer;
@@ -89,5 +92,10 @@ html
         } else {
           alert('GPS를 지원하지 않습니다');
         }
+      });
+      Array.prototype.forEach.call(document.querySelectorAll('.history-btn'), function(el) {
+        el.addEventListener('click', function(e) {
+          location.href = '/search/' + e.target.textContent;
+        })
       });
 

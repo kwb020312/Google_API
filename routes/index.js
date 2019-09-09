@@ -13,7 +13,8 @@ const googleMapsClient = googleMaps.createClient({
 router.get('/', async (req, res, next) => {
   try {
     const favorites = await Favorite.find({});
-    res.render('index', { results: favorites });
+    const histories = await History.find({}).limit(5).sort('-createdAt');
+    res.render('index', { results: favorites, history: histories });
   } catch (error) {
     console.error(error);
     next(error);
@@ -37,6 +38,7 @@ router.get('/search/:query', async (req, res, next) => {
   const googlePlacesNearby = util.promisify(googleMapsClient.placesNearby);
   const { lat, lng, type } = req.query;
   try {
+    const histories = await History.find({}).limit(5).sort('-createdAt');
     const history = new History({ query: req.params.query });
     await history.save();
     let response;
@@ -59,6 +61,7 @@ router.get('/search/:query', async (req, res, next) => {
       title: `${req.params.query} 검색 결과`,
       results: response.json.results,
       query: req.params.query,
+      history: histories,
     });
   } catch (error) {
     console.error(error);
@@ -74,6 +77,16 @@ router.post('/location/:id/favorite', async (req, res, next) => {
       location: [req.body.lng, req.body.lat],
     });
     res.send(favorite);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+// 즐겨찾기 삭제 라우터
+router.delete('/location/:id/favorite', async (req, res, next) => {
+  try {
+    await Favorite.remove({ placeId: req.params.id });
+    res.send(deleted);
   } catch (error) {
     console.error(error);
     next(error);
