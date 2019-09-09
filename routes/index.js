@@ -80,4 +80,6 @@ router.post('/location/:id/favorite', async (req, res, next) => {
   }
 });
 
+
+
 module.exports = router;
